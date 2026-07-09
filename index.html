@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FPS BOOST - optymalizacja Windows, komputerów i laptopów gamingowych. Zwiększ płynność gier, przyspiesz system i uporządkuj ustawienia.">
+  <title>FPS BOOST - Optymalizacja Windows i komputerów gamingowych</title>
+  <style>
+    /* ===== RESET I ZMIENNE ===== */
+    :root {
+      --bg: #05060d;
+      --bg-soft: #0b0f1c;
+      --panel: rgba(18, 24, 43, 0.72);
+      --panel-strong: rgba(22, 29, 52, 0.9);
+      --text: #f4f7ff;
+      --muted: #a9b3ca;
+      --blue: #25c7ff;
+      --cyan: #2df2ff;
+      --violet: #9b5cff;
+      --pink: #ff4fd8;
+      --green: #41f097;
+      --yellow: #ffd84d;
+      --danger: #ff4d72;
+      --border: rgba(255, 255, 255, 0.13);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      --radius: 8px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 16% 8%, rgba(45, 242, 255, 0.2), transparent 30%),
+        radial-gradient(circle at 80% 12%, rgba(255, 79, 216, 0.14), transparent 29%),
+        radial-gradient(circle at 72% 82%, rgba(65, 240, 151, 0.11), transparent 30%),
+        linear-gradient(135deg, #03040a 0%, #080b18 44%, #05060d 100%);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    .container {
+      width: min(100% - 32px, var(--max));
+      margin: 0 auto;
+    }
+
+    .section {
+      padding: 92px 0;
+      position: relative;
+    }
+
+    .section-title {
+      max-width: 760px;
+      margin-bottom: 34px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      color: var(--blue);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 880px;
+      font-size: clamp(2.45rem, 7vw, 5.5rem);
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+    }
+
+    h3 {
+      font-size: 1.25rem;
+    }
+
+    p {
+      color: var(--muted);
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #ffffff, var(--blue), var(--violet));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(5, 6, 13, 0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .nav-inner {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.15rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .logo span {
+      color: var(--blue);
+      text-shadow: 0 0 22px rgba(37, 199, 255, 0.8);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-weight: 700;
+      transition: color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-1px);
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 3px solid rgba(65, 240, 151, 0.75);
+      outline-offset: 3px;
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      margin: 5px auto;
+      background: currentColor;
+      border-radius: 2px;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: calc(100vh - 76px);
+      display: grid;
+      align-items: center;
+      padding: 82px 0 78px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(37, 199, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(155, 92, 255, 0.08) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom, transparent, #000 16%, #000 76%, transparent);
+      animation: gridMove 18s linear infinite;
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 520px;
+      height: 520px;
+      right: -180px;
+      top: 20%;
+      border: 1px solid rgba(37, 199, 255, 0.26);
+      box-shadow:
+        0 0 70px rgba(37, 199, 255, 0.18),
+        inset 0 0 70px rgba(155, 92, 255, 0.12);
+      transform: rotate(25deg);
+      animation: pulsePanel 5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .hero-shell {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(330px, 0.95fr);
+      align-items: center;
+      gap: clamp(32px, 6vw, 76px);
+      animation: riseIn 0.9s ease both;
+    }
+
+    .hero-copy {
+      max-width: 880px;
+    }
+
+    .hero-copy p {
+      max-width: 720px;
+      margin-top: 22px;
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 470px;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+    }
+
+    .hero-visual::before {
+      content: "";
+      position: absolute;
+      inset: 8% 2%;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle, rgba(45, 242, 255, 0.3), transparent 56%),
+        radial-gradient(circle at 70% 24%, rgba(255, 79, 216, 0.22), transparent 45%);
+      filter: blur(28px);
+      opacity: 0.88;
+      z-index: -1;
+    }
+
+    .visual-card {
+      width: min(100%, 520px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 18px;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03)),
+        rgba(9, 13, 25, 0.84);
+      box-shadow:
+        0 34px 110px rgba(0, 0, 0, 0.55),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+      overflow: hidden;
+      transform: perspective(900px) rotateY(-8deg) rotateX(4deg);
+    }
+
+    .visual-topbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .visual-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 18px currentColor;
+    }
+
+    .visual-dot:nth-child(2) {
+      background: var(--yellow);
+    }
+
+    .visual-dot:nth-child(3) {
+      background: var(--pink);
+    }
+
+    .visual-screen {
+      padding: 18px;
+    }
+
+    .hero-graphic {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .boost-chip,
+    .fps-chip {
+      position: absolute;
+      z-index: 2;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: var(--radius);
+      background: rgba(8, 12, 24, 0.82);
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.38);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .boost-chip {
+      left: 0;
+      bottom: 54px;
+      padding: 14px 16px;
+    }
+
+    .fps-chip {
+      right: 0;
+      top: 72px;
+      padding: 16px;
+      min-width: 150px;
+    }
+
+    .boost-chip strong,
+    .fps-chip strong {
+      display: block;
+      color: #ffffff;
+      font-size: 1.45rem;
+      line-height: 1;
+    }
+
+    .boost-chip span,
+    .fps-chip span {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .bar-stack {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .bar-stack i {
+      display: block;
+      height: 7px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--green), var(--cyan));
+      box-shadow: 0 0 14px rgba(65, 240, 151, 0.4);
+    }
+
+    .bar-stack i:nth-child(2) {
+      width: 76%;
+      background: linear-gradient(90deg, var(--blue), var(--violet));
+    }
+
+    .bar-stack i:nth-child(3) {
+      width: 58%;
+      background: linear-gradient(90deg, var(--yellow), var(--pink));
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 760px;
+      margin-top: 52px;
+    }
+
+    .stat {
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.055);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--text);
+      font-size: 1.35rem;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    /* ===== PRZYCISKI ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 12px 20px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--blue), var(--violet));
+      color: #ffffff;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 0 28px rgba(37, 199, 255, 0.24);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 0 42px rgba(155, 92, 255, 0.34);
+    }
+
+    .btn:disabled {
+      cursor: wait;
+      opacity: 0.72;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: var(--border);
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      border-color: rgba(37, 199, 255, 0.5);
+      box-shadow: 0 0 30px rgba(37, 199, 255, 0.14);
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    /* ===== KARTY I SIATKI ===== */
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .services-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .packages-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      align-items: stretch;
+    }
+
+    .card {
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      overflow: hidden;
+      transition: transform 0.28s ease, border-color 0.28s ease, background 0.28s ease;
+      animation: riseIn 0.8s ease both;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(37, 199, 255, 0.12), transparent 32%, rgba(155, 92, 255, 0.1));
+      opacity: 0;
+      transition: opacity 0.28s ease;
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(37, 199, 255, 0.42);
+      background: var(--panel-strong);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .service-card {
+      min-height: 190px;
+      padding: 28px;
+    }
+
+    .service-icon {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      margin-bottom: 20px;
+      border-radius: var(--radius);
+      background: rgba(37, 199, 255, 0.12);
+      box-shadow: inset 0 0 22px rgba(37, 199, 255, 0.12);
+      font-size: 1.55rem;
+    }
+
+    .service-icon svg {
+      width: 28px;
+      height: 28px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .service-card h3,
+    .package-card h3 {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 10px;
+    }
+
+    .service-card p {
+      position: relative;
+      z-index: 1;
+    }
+
+    .package-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 440px;
+      padding: 28px;
+    }
+
+    .package-head {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .package-head h3 {
+      margin-bottom: 0;
+    }
+
+    .package-card.featured .package-head {
+      padding-right: 90px;
+    }
+
+    .package-dot {
+      flex: 0 0 auto;
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 22px currentColor;
+    }
+
+    .package-dot.blue {
+      background: var(--blue);
+    }
+
+    .package-dot.violet {
+      background: var(--violet);
+    }
+
+    .package-dot.gold {
+      background: var(--yellow);
+    }
+
+    .package-card.featured {
+      border-color: rgba(255, 216, 77, 0.52);
+      box-shadow:
+        var(--shadow),
+        0 0 40px rgba(255, 216, 77, 0.12);
+    }
+
+    .package-card.featured::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% -42% -20%;
+      height: 190px;
+      background: radial-gradient(circle, rgba(255, 216, 77, 0.22), transparent 70%);
+      pointer-events: none;
+    }
+
+    .badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 2;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--yellow), #ff9d2e);
+      color: #17120a;
+      font-size: 0.72rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .price {
+      position: relative;
+      z-index: 1;
+      margin: 12px 0 18px;
+      color: #ffffff;
+      font-size: 2.4rem;
+      font-weight: 900;
+    }
+
+    .features {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 10px;
+      margin: 0 0 24px;
+      list-style: none;
+      color: var(--muted);
+      flex: 1;
+    }
+
+    .features li {
+      display: flex;
+      gap: 8px;
+    }
+
+    .features li::before {
+      content: "✔";
+      color: var(--green);
+      font-weight: 900;
+    }
+
+    .why-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .why-item {
+      display: grid;
+      gap: 10px;
+      padding: 22px;
+      min-height: 120px;
+    }
+
+    .why-icon {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: rgba(65, 240, 151, 0.12);
+      color: var(--green);
+      font-weight: 900;
+    }
+
+    .why-item strong {
+      display: block;
+      font-size: 1.05rem;
+    }
+
+    /* ===== FAQ ===== */
+    .faq-list {
+      display: grid;
+      gap: 12px;
+      max-width: 900px;
+    }
+
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.055);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      text-align: left;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .faq-question span:last-child {
+      color: var(--blue);
+      font-size: 1.35rem;
+      line-height: 1;
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.28s ease;
+    }
+
+    .faq-answer p {
+      padding: 0 20px 20px;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 180px;
+    }
+
+    .faq-item.active .faq-question span:last-child {
+      transform: rotate(45deg);
+    }
+
+    /* ===== MODAL ===== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: rgba(1, 2, 7, 0.78);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .modal-backdrop.active {
+      display: grid;
+      animation: fadeIn 0.22s ease both;
+    }
+
+    .modal {
+      width: min(100%, 760px);
+      max-height: min(92vh, 920px);
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(37, 199, 255, 0.08), transparent 30%, rgba(155, 92, 255, 0.09)),
+        rgba(12, 16, 30, 0.96);
+      box-shadow: 0 28px 110px rgba(0, 0, 0, 0.72);
+      animation: modalIn 0.28s ease both;
+    }
+
+    .modal-header {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 22px 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(12, 16, 30, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .modal-header h2 {
+      font-size: clamp(1.45rem, 4vw, 2.1rem);
+    }
+
+    .modal-close {
+      flex: 0 0 auto;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text);
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 77, 114, 0.18);
+      transform: scale(1.03);
+    }
+
+    .order-form {
+      display: grid;
+      gap: 16px;
+      padding: 24px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .form-field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .form-field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      color: #dbe6ff;
+      font-size: 0.92rem;
+      font-weight: 800;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.075);
+      color: var(--text);
+      padding: 11px 12px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    select option {
+      background: #0b0f1c;
+      color: var(--text);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 112px;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(37, 199, 255, 0.7);
+      box-shadow: 0 0 0 4px rgba(37, 199, 255, 0.1);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    input[readonly] {
+      cursor: default;
+      background: rgba(37, 199, 255, 0.08);
+    }
+
+    .error-message {
+      min-height: 18px;
+      color: var(--danger);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .honeypot {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .success-message {
+      display: none;
+      margin: 0 24px 24px;
+      padding: 16px;
+      border: 1px solid rgba(65, 240, 151, 0.4);
+      border-radius: var(--radius);
+      background: rgba(65, 240, 151, 0.1);
+    }
+
+    .success-message.error {
+      border-color: rgba(255, 77, 114, 0.44);
+      background: rgba(255, 77, 114, 0.1);
+    }
+
+    .success-message.active {
+      display: block;
+    }
+
+    .success-message strong {
+      display: block;
+      color: var(--green);
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+    }
+
+    .success-message.error strong {
+      color: var(--danger);
+    }
+
+    /* ===== STOPKA ===== */
+    .footer {
+      padding: 42px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.22);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .footer p {
+      margin-top: 6px;
+    }
+
+    .copyright {
+      color: var(--muted);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* ===== ANIMACJE ===== */
+    @keyframes gridMove {
+      from {
+        background-position: 0 0, 0 0;
+      }
+      to {
+        background-position: 96px 96px, 96px 96px;
+      }
+    }
+
+    @keyframes pulsePanel {
+      0%,
+      100% {
+        transform: rotate(25deg) scale(1);
+        opacity: 0.72;
+      }
+      50% {
+        transform: rotate(25deg) scale(1.05);
+        opacity: 1;
+      }
+    }
+
+    @keyframes riseIn {
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RESPONSYWNOŚĆ ===== */
+    @media (max-width: 1040px) {
+      .packages-grid,
+      .why-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .section {
+        padding: 72px 0;
+      }
+
+      .menu-toggle {
+        display: inline-block;
+      }
+
+      .nav-links {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 76px;
+        display: none;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: rgba(9, 13, 25, 0.96);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        box-shadow: var(--shadow);
+      }
+
+      .nav-links.active {
+        display: grid;
+      }
+
+      .nav-links a {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 74px 0 66px;
+      }
+
+      .hero-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        min-height: 390px;
+      }
+
+      .visual-card {
+        transform: none;
+      }
+
+      .boost-chip {
+        left: 12px;
+        bottom: 20px;
+      }
+
+      .fps-chip {
+        right: 12px;
+        top: 24px;
+      }
+
+      .hero-stats,
+      .services-grid,
+      .packages-grid,
+      .why-grid,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .package-card {
+        min-height: auto;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .copyright {
+        white-space: normal;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .container {
+        width: min(100% - 24px, var(--max));
+      }
+
+      .hero-actions {
+        display: grid;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .hero-visual {
+        min-height: 330px;
+      }
+
+      .boost-chip,
+      .fps-chip {
+        position: static;
+        width: 100%;
+        margin-top: 12px;
+      }
+
+      .hero-visual {
+        display: block;
+      }
+
+      .visual-card {
+        margin-bottom: 0;
+      }
+
+      .service-card,
+      .package-card,
+      .why-item,
+      .order-form {
+        padding: 20px;
+      }
+
+      .modal-header {
+        padding: 18px 20px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== NAVBAR ===== -->
+  <header class="navbar">
+    <nav class="container nav-inner" aria-label="Główna nawigacja">
+      <a href="#start" class="logo" aria-label="FPS BOOST - start"><span>🚀</span> FPS BOOST</a>
+      <button class="menu-toggle" type="button" aria-label="Otwórz menu" aria-expanded="false" aria-controls="navLinks">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#start">Start</a></li>
+        <li><a href="#uslugi">Usługi</a></li>
+        <li><a href="#pakiety">Pakiety</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ===== HERO SECTION ===== -->
+    <section id="start" class="hero">
+      <div class="container hero-shell">
+        <div class="hero-copy">
+          <span class="eyebrow">Profesjonalna optymalizacja IT</span>
+          <h1>Zwiększ FPS. Przyspiesz komputer. <span class="gradient-text">Graj płynniej.</span></h1>
+          <p>Ustawienia systemu, sterowniki i czyszczenie dobrane pod gry, stabilność FPS i szybsze działanie Windows.</p>
+          <div class="hero-actions">
+            <button class="btn js-open-order" type="button" data-package="FPS Boost 4 PREMIUM - 40 zł">Zamów usługę</button>
+            <a class="btn btn-secondary" href="#pakiety">Zobacz pakiety</a>
+          </div>
+          <div class="hero-stats" aria-label="Najważniejsze korzyści">
+            <div class="stat">
+              <strong>Windows 10/11</strong>
+              <span>konfiguracja pod wydajność</span>
+            </div>
+            <div class="stat">
+              <strong>Gaming</strong>
+              <span>ustawienia pod płynność gier</span>
+            </div>
+            <div class="stat">
+              <strong>Wsparcie</strong>
+              <span>kontakt po wykonaniu usługi</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="fps-chip">
+            <strong>+FPS</strong>
+            <span>stabilniejsza gra</span>
+            <div class="bar-stack"><i style="width: 92%"></i><i></i><i></i></div>
+          </div>
+          <div class="visual-card">
+            <div class="visual-topbar">
+              <span class="visual-dot"></span>
+              <span class="visual-dot"></span>
+              <span class="visual-dot"></span>
+            </div>
+            <div class="visual-screen">
+              <svg class="hero-graphic" viewBox="0 0 560 420" role="img" aria-label="">
+                <defs>
+                  <linearGradient id="monitorGlow" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0" stop-color="#2df2ff"/>
+                    <stop offset="0.55" stop-color="#9b5cff"/>
+                    <stop offset="1" stop-color="#ff4fd8"/>
+                  </linearGradient>
+                  <linearGradient id="greenLine" x1="0" x2="1">
+                    <stop offset="0" stop-color="#41f097"/>
+                    <stop offset="1" stop-color="#2df2ff"/>
+                  </linearGradient>
+                  <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation="8" result="blur"/>
+                    <feMerge>
+                      <feMergeNode in="blur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                </defs>
+                <rect x="58" y="48" width="444" height="260" rx="24" fill="#070b18" stroke="url(#monitorGlow)" stroke-width="3"/>
+                <rect x="82" y="74" width="396" height="204" rx="16" fill="#0d1428"/>
+                <path d="M104 229 C156 186 201 215 242 168 S326 118 374 153 438 154 462 98" fill="none" stroke="url(#greenLine)" stroke-width="8" stroke-linecap="round" filter="url(#softGlow)"/>
+                <path d="M104 250 H462" stroke="#253451" stroke-width="2"/>
+                <path d="M104 202 H462" stroke="#1b2945" stroke-width="2"/>
+                <path d="M104 154 H462" stroke="#1b2945" stroke-width="2"/>
+                <path d="M104 106 H462" stroke="#1b2945" stroke-width="2"/>
+                <g fill="#2df2ff" opacity="0.95">
+                  <circle cx="146" cy="214" r="5"/>
+                  <circle cx="242" cy="168" r="5"/>
+                  <circle cx="374" cy="153" r="5"/>
+                  <circle cx="462" cy="98" r="5"/>
+                </g>
+                <rect x="182" y="320" width="196" height="20" rx="10" fill="#111a31"/>
+                <path d="M238 308 H322 L338 348 H222 Z" fill="#0b1021" stroke="#253451"/>
+                <rect x="120" y="358" width="320" height="18" rx="9" fill="url(#monitorGlow)" opacity="0.72"/>
+                <g opacity="0.95">
+                  <rect x="118" y="94" width="78" height="22" rx="8" fill="rgba(45,242,255,.18)"/>
+                  <rect x="118" y="128" width="122" height="12" rx="6" fill="#263a61"/>
+                  <rect x="118" y="150" width="92" height="12" rx="6" fill="#263a61"/>
+                  <rect x="342" y="210" width="96" height="16" rx="8" fill="rgba(65,240,151,.22)"/>
+                  <rect x="342" y="238" width="70" height="12" rx="6" fill="#263a61"/>
+                </g>
+              </svg>
+            </div>
+          </div>
+          <div class="boost-chip">
+            <strong>BOOST</strong>
+            <span>Windows tuning</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== USŁUGI ===== -->
+    <section id="uslugi" class="section">
+      <div class="container">
+        <div class="section-title reveal">
+          <span class="eyebrow">Usługi</span>
+          <h2>Optymalizacja sprzętu i systemu pod płynne działanie.</h2>
+        </div>
+        <div class="grid services-grid">
+          <article class="card service-card reveal">
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15h3l2-3h2l2 3h3"/><path d="M8 11v4"/><path d="M6 13h4"/><path d="M16.5 12.5h.01"/><path d="M18.5 14.5h.01"/><path d="M5.5 18h13a3 3 0 0 0 2.9-3.8l-1.2-4.4A4 4 0 0 0 16.3 7H7.7a4 4 0 0 0-3.9 2.8l-1.2 4.4A3 3 0 0 0 5.5 18Z"/></svg>
+            </div>
+            <h3>FPS Boost</h3>
+            <p>Ustawienia systemu i gier pod stabilniejszą liczbę klatek.</p>
+          </article>
+          <article class="card service-card reveal">
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 10-14h-7l1-6Z"/></svg>
+            </div>
+            <h3>Optymalizacja Windows</h3>
+            <p>Wyłączenie zbędnych funkcji i uporządkowanie ustawień wydajności.</p>
+          </article>
+          <article class="card service-card reveal">
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18"/><path d="M9 17h6"/><path d="M10 12h4"/><path d="M12 3v9"/><path d="M7 12h10l-2 5H9l-2-5Z"/></svg>
+            </div>
+            <h3>Czyszczenie systemu</h3>
+            <p>Usuwanie plików tymczasowych i elementów spowalniających start.</p>
+          </article>
+          <article class="card service-card reveal">
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.6 2.6-3-3 2.6-2.6Z"/></svg>
+            </div>
+            <h3>Sterowniki</h3>
+            <p>Sprawdzenie, aktualizacja i konfiguracja najważniejszych sterowników.</p>
+          </article>
+          <article class="card service-card reveal">
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19c4-1 8-5 10-9"/><path d="M14 10h5V5"/><path d="M14 10 20 4"/><path d="M5 14l5 5"/><path d="M3 21l4-1-3-3-1 4Z"/></svg>
+            </div>
+            <h3>Wydajność</h3>
+            <p>Dopasowanie planu zasilania i ustawień pod możliwości sprzętu.</p>
+          </article>
+          <article class="card service-card reveal">
+            <div class="service-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v5c0 4.4 2.9 8.4 7 10 4.1-1.6 7-5.6 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-5"/></svg>
+            </div>
+            <h3>Stabilność</h3>
+            <p>Zmniejszenie problemów z przycięciami, opóźnieniami i obciążeniem.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PAKIETY FPS BOOST ===== -->
+    <section id="pakiety" class="section">
+      <div class="container">
+        <div class="section-title reveal">
+          <span class="eyebrow">Pakiety FPS BOOST</span>
+          <h2>Wybierz zakres optymalizacji dla swojego komputera.</h2>
+        </div>
+        <div class="grid packages-grid">
+          <article class="card package-card reveal">
+            <div class="package-head"><span class="package-dot"></span><h3>FPS Boost 1</h3></div>
+            <div class="price">10 zł</div>
+            <ul class="features">
+              <li>Podstawowa optymalizacja Windows</li>
+              <li>Wyłączenie zbędnych procesów</li>
+              <li>Lepsza płynność codziennej pracy</li>
+            </ul>
+            <button class="btn btn-full js-open-order" type="button" data-package="FPS Boost 1 - 10 zł">Wybierz</button>
+          </article>
+
+          <article class="card package-card reveal">
+            <div class="package-head"><span class="package-dot blue"></span><h3>FPS Boost 2</h3></div>
+            <div class="price">20 zł</div>
+            <ul class="features">
+              <li>Wszystko z pakietu 1</li>
+              <li>Optymalizacja pod gry</li>
+              <li>Czyszczenie systemu</li>
+              <li>Konfiguracja ustawień wydajności Windows</li>
+            </ul>
+            <button class="btn btn-full js-open-order" type="button" data-package="FPS Boost 2 - 20 zł">Wybierz</button>
+          </article>
+
+          <article class="card package-card reveal">
+            <div class="package-head"><span class="package-dot violet"></span><h3>FPS Boost 3</h3></div>
+            <div class="price">30 zł</div>
+            <ul class="features">
+              <li>Wszystko z pakietu 2</li>
+              <li>Zaawansowana optymalizacja</li>
+              <li>Poprawa stabilności FPS</li>
+              <li>Aktualizacja sterowników</li>
+            </ul>
+            <button class="btn btn-full js-open-order" type="button" data-package="FPS Boost 3 - 30 zł">Wybierz</button>
+          </article>
+
+          <article class="card package-card featured reveal">
+            <span class="badge">NAJPOPULARNIEJSZY</span>
+            <div class="package-head"><span class="package-dot gold"></span><h3>FPS Boost 4 PREMIUM</h3></div>
+            <div class="price">40 zł</div>
+            <ul class="features">
+              <li>Wszystko z poprzednich pakietów</li>
+              <li>Najszersza optymalizacja systemu</li>
+              <li>Indywidualna konfiguracja</li>
+              <li>Priorytetowy kontakt</li>
+              <li>Wsparcie po wykonaniu usługi</li>
+            </ul>
+            <button class="btn btn-full js-open-order" type="button" data-package="FPS Boost 4 PREMIUM - 40 zł">Wybierz</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== DLACZEGO FPS BOOST ===== -->
+    <section class="section">
+      <div class="container">
+        <div class="section-title reveal">
+          <span class="eyebrow">Dlaczego FPS BOOST?</span>
+          <h2>Profesjonalne podejście do wydajności i stabilności.</h2>
+        </div>
+        <div class="grid why-grid">
+          <div class="card why-item reveal"><span class="why-icon">✓</span><strong>Szybka realizacja</strong><p>Bez zbędnego czekania i przeciągania kontaktu.</p></div>
+          <div class="card why-item reveal"><span class="why-icon">✓</span><strong>Bezpieczna optymalizacja</strong><p>Zmiany skupione na wydajności, bez kasowania prywatnych plików.</p></div>
+          <div class="card why-item reveal"><span class="why-icon">✓</span><strong>Indywidualne ustawienia</strong><p>Zakres dopasowany do sprzętu, systemu i gier.</p></div>
+          <div class="card why-item reveal"><span class="why-icon">✓</span><strong>Wsparcie klienta</strong><p>Możesz dopytać o ustawienia także po wykonaniu usługi.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section class="section">
+      <div class="container">
+        <div class="section-title reveal">
+          <span class="eyebrow">FAQ</span>
+          <h2>Najczęstsze pytania.</h2>
+        </div>
+        <div class="faq-list reveal">
+          <div class="faq-item active">
+            <button class="faq-question" type="button" aria-expanded="true">
+              <span>Czy optymalizacja zwiększy FPS?</span>
+              <span>+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Optymalizacja może poprawić płynność i stabilność FPS, szczególnie gdy system jest obciążony zbędnymi procesami, błędnymi ustawieniami lub przestarzałymi sterownikami.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false">
+              <span>Ile trwa usługa?</span>
+              <span>+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Czas zależy od stanu komputera i wybranego pakietu. Zwykle podstawowa optymalizacja trwa krócej, a pakiety zaawansowane wymagają dokładniejszej konfiguracji.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false">
+              <span>Czy moje dane zostaną usunięte?</span>
+              <span>+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Nie. Optymalizacja skupia się na ustawieniach, zbędnych plikach tymczasowych i wydajności systemu. Prywatne pliki użytkownika nie są usuwane.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false">
+              <span>Czy działa na laptopach?</span>
+              <span>+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Tak. Usługa jest przeznaczona zarówno dla komputerów stacjonarnych, jak i laptopów z Windows 10, Windows 11 lub innym systemem po wcześniejszym ustaleniu zakresu.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== KONTAKT / CTA ===== -->
+    <section id="kontakt" class="section">
+      <div class="container">
+        <div class="card service-card reveal">
+          <span class="eyebrow">Kontakt</span>
+          <h2>Zamów usługę FPS BOOST i przywróć komputerowi tempo.</h2>
+          <p>Wybierz pakiet albo wyślij zamówienie bezpośrednio. Skontaktujemy się z Tobą, żeby ustalić szczegóły optymalizacji.</p>
+          <div class="hero-actions">
+            <button class="btn js-open-order" type="button" data-package="FPS Boost 4 PREMIUM - 40 zł">Zamów usługę</button>
+            <a class="btn btn-secondary" href="#pakiety">Porównaj pakiety</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== MODAL FORMULARZA ZAMÓWIENIA ===== -->
+  <div class="modal-backdrop" id="orderModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <h2 id="modalTitle">Zamów usługę FPS BOOST</h2>
+        <button class="modal-close" type="button" aria-label="Zamknij formularz">&times;</button>
+      </div>
+
+      <form class="order-form" id="orderForm" action="https://formsubmit.co/kasztanbartek650@gmail.com" data-ajax-action="https://formsubmit.co/ajax/kasztanbartek650@gmail.com" method="POST" novalidate>
+        <!-- Pola FormSubmit -->
+        <input type="hidden" name="_subject" value="Nowe zamówienie FPS BOOST">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+
+        <!-- Honeypot przeciw botom -->
+        <div class="honeypot" aria-hidden="true">
+          <label for="website">Nie wypełniaj tego pola</label>
+          <input type="text" id="website" name="_honey" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="firstName">Imię</label>
+            <input type="text" id="firstName" name="Imię" autocomplete="given-name" required>
+            <span class="error-message" data-error-for="firstName"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="lastName">Nazwisko</label>
+            <input type="text" id="lastName" name="Nazwisko" autocomplete="family-name" required>
+            <span class="error-message" data-error-for="lastName"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="email">Adres e-mail</label>
+            <input type="email" id="email" name="email" autocomplete="email" required>
+            <span class="error-message" data-error-for="email"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="phone">Numer telefonu</label>
+            <input type="tel" id="phone" name="Telefon" autocomplete="tel" required>
+            <span class="error-message" data-error-for="phone"></span>
+          </div>
+
+          <div class="form-field full">
+            <label for="computerModel">Model komputera/laptopa</label>
+            <input type="text" id="computerModel" name="Model komputera" required>
+            <span class="error-message" data-error-for="computerModel"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="system">System operacyjny</label>
+            <select id="system" name="System" required>
+              <option value="">Wybierz system</option>
+              <option value="Windows 10">Windows 10</option>
+              <option value="Windows 11">Windows 11</option>
+              <option value="Inny">Inny</option>
+            </select>
+            <span class="error-message" data-error-for="system"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="package">Wybrany pakiet</label>
+            <input type="text" id="package" name="Wybrany pakiet" readonly required>
+            <span class="error-message" data-error-for="package"></span>
+          </div>
+
+          <div class="form-field full">
+            <label for="message">Dodatkowa wiadomość</label>
+            <textarea id="message" name="Dodatkowa wiadomość" placeholder="Np. nazwa gry, problem z FPS albo specyfikacja komputera"></textarea>
+            <span class="error-message" data-error-for="message"></span>
+          </div>
+        </div>
+
+        <button class="btn btn-full" id="submitButton" type="submit">Wyślij zamówienie</button>
+      </form>
+
+      <div class="success-message" id="successMessage" role="status">
+        <strong>Zamówienie zostało wysłane.</strong>
+        <p>Dziękujemy. Skontaktujemy się z Tobą w sprawie optymalizacji.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== STOPKA ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <a href="#start" class="logo"><span>🚀</span> FPS BOOST</a>
+        <p>Profesjonalna optymalizacja komputerów i laptopów</p>
+      </div>
+      <div class="copyright">© 2026 FPS BOOST</div>
+    </div>
+  </footer>
+
+  <script>
+    /* ===== MENU MOBILNE ===== */
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector(".nav-links");
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = navLinks.classList.toggle("active");
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    navLinks.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("active");
+        menuToggle.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      const clickedInsideMenu = navLinks.contains(event.target) || menuToggle.contains(event.target);
+
+      if (!clickedInsideMenu && navLinks.classList.contains("active")) {
+        navLinks.classList.remove("active");
+        menuToggle.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    /* ===== ANIMACJE WEJŚCIA ===== */
+    const revealElements = document.querySelectorAll(".reveal");
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14 });
+
+    revealElements.forEach((element) => revealObserver.observe(element));
+
+    /* ===== FAQ ===== */
+    document.querySelectorAll(".faq-question").forEach((question) => {
+      question.addEventListener("click", () => {
+        const item = question.closest(".faq-item");
+        const isOpen = item.classList.toggle("active");
+        question.setAttribute("aria-expanded", String(isOpen));
+      });
+    });
+
+    /* ===== MODAL ZAMÓWIENIA ===== */
+    const modalBackdrop = document.getElementById("orderModal");
+    const closeModalButton = document.querySelector(".modal-close");
+    const openOrderButtons = document.querySelectorAll(".js-open-order");
+    const orderForm = document.getElementById("orderForm");
+    const packageInput = document.getElementById("package");
+    const successMessage = document.getElementById("successMessage");
+    const submitButton = document.getElementById("submitButton");
+
+    function openModal(packageName) {
+      packageInput.value = packageName || "FPS Boost 4 PREMIUM - 40 zł";
+      successMessage.classList.remove("active", "error");
+      successMessage.querySelector("strong").textContent = "Zamówienie zostało wysłane.";
+      successMessage.querySelector("p").textContent = "Dziękujemy. Skontaktujemy się z Tobą w sprawie optymalizacji.";
+      submitButton.disabled = false;
+      submitButton.textContent = "Wyślij zamówienie";
+      modalBackdrop.classList.add("active");
+      modalBackdrop.setAttribute("aria-hidden", "false");
+      document.body.classList.add("modal-open");
+      setTimeout(() => document.getElementById("firstName").focus(), 120);
+    }
+
+    function closeModal() {
+      modalBackdrop.classList.remove("active");
+      modalBackdrop.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("modal-open");
+    }
+
+    openOrderButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        openModal(button.dataset.package);
+      });
+    });
+
+    closeModalButton.addEventListener("click", closeModal);
+
+    modalBackdrop.addEventListener("click", (event) => {
+      if (event.target === modalBackdrop) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && modalBackdrop.classList.contains("active")) {
+        closeModal();
+      }
+    });
+
+    /* ===== WALIDACJA FORMULARZA ===== */
+    const validators = {
+      firstName(value) {
+        if (!value.trim()) return "Wpisz imię.";
+        if (!/^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż\s-]+$/.test(value.trim())) return "Imię może zawierać tylko litery, spacje i myślnik.";
+        return "";
+      },
+      lastName(value) {
+        if (!value.trim()) return "Wpisz nazwisko.";
+        if (!/^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż\s-]+$/.test(value.trim())) return "Nazwisko może zawierać tylko litery, spacje i myślnik.";
+        return "";
+      },
+      email(value) {
+        if (!value.trim()) return "Wpisz adres e-mail.";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim())) return "Wpisz poprawny adres e-mail.";
+        return "";
+      },
+      phone(value) {
+        const digits = value.replace(/\D/g, "");
+        if (!value.trim()) return "Wpisz numer telefonu.";
+        if (digits.length < 9) return "Numer telefonu musi mieć minimum 9 cyfr.";
+        return "";
+      },
+      computerModel(value) {
+        if (!value.trim()) return "Wpisz model komputera lub laptopa.";
+        return "";
+      },
+      system(value) {
+        if (!value.trim()) return "Wybierz system operacyjny.";
+        return "";
+      },
+      package(value) {
+        if (!value.trim()) return "Wybierz pakiet.";
+        return "";
+      }
+    };
+
+    function setError(fieldId, message) {
+      const errorElement = document.querySelector(`[data-error-for="${fieldId}"]`);
+      const field = document.getElementById(fieldId);
+      errorElement.textContent = message;
+      field.setAttribute("aria-invalid", message ? "true" : "false");
+    }
+
+    function validateField(fieldId) {
+      const field = document.getElementById(fieldId);
+      const message = validators[fieldId](field.value);
+      setError(fieldId, message);
+      return !message;
+    }
+
+    function showFormStatus(type, title, text) {
+      successMessage.classList.toggle("error", type === "error");
+      successMessage.querySelector("strong").textContent = title;
+      successMessage.querySelector("p").textContent = text;
+      successMessage.classList.add("active");
+    }
+
+    Object.keys(validators).forEach((fieldId) => {
+      const field = document.getElementById(fieldId);
+      field.addEventListener("input", () => validateField(fieldId));
+      field.addEventListener("blur", () => validateField(fieldId));
+    });
+
+    orderForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const botField = document.getElementById("website");
+      const isBot = botField.value.trim().length > 0;
+      const isValid = Object.keys(validators).every((fieldId) => validateField(fieldId));
+
+      if (isBot || !isValid) {
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Wysyłanie...";
+
+      try {
+        const formData = new FormData(orderForm);
+        const response = await fetch(orderForm.dataset.ajaxAction, {
+          method: "POST",
+          headers: {
+            "Accept": "application/json"
+          },
+          body: formData
+        });
+
+        if (!response.ok) {
+          throw new Error("FormSubmit zwrócił błąd.");
+        }
+
+        orderForm.reset();
+        packageInput.value = "FPS Boost 4 PREMIUM - 40 zł";
+        showFormStatus("success", "Zamówienie zostało wysłane.", "Dziękujemy. Skontaktujemy się z Tobą w sprawie optymalizacji.");
+      } catch (error) {
+        showFormStatus("error", "Nie udało się wysłać formularza.", "Jeśli to pierwsze użycie FormSubmit, sprawdź skrzynkę kasztanbartek650@gmail.com i kliknij link aktywacyjny. Potem spróbuj ponownie.");
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Wyślij zamówienie";
+      }
+    });
+  </script>
+</body>
+</html>
